@@ -53,6 +53,7 @@ mod thread {
 
     #[cfg(feature = "nightly")]
     pub use embassy_macros::main_cortex_m as main;
+    use nrf_softdevice_s132::sd_app_evt_wait;
 
     use crate::{raw, Spawner};
 
@@ -104,7 +105,7 @@ mod thread {
             loop {
                 unsafe {
                     self.inner.poll();
-                    asm!("wfe");
+                    sd_app_evt_wait();
                 };
             }
         }
