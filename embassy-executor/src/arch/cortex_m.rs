@@ -224,7 +224,7 @@ mod interrupt {
 
             unsafe { NVIC::unmask(irq) }
 
-            executor.spawner().make_fsend()
+            executor.spawner().make_send()
         }
 
         /// Get a SendSpawner for this executor
