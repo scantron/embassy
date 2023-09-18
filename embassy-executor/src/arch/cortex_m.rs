@@ -105,7 +105,16 @@ mod thread {
             loop {
                 unsafe {
                     self.inner.poll();
-                    sd_app_evt_wait();
+
+                    #[cfg(feature = "nrf52dk")]
+                    {
+                        sd_app_evt_wait();
+                    }
+
+                    #[cfg(not(feature = "nrf52dk"))]
+                    {
+                        asm!("wfe");
+                    }
                 };
             }
         }
@@ -215,7 +224,7 @@ mod interrupt {
 
             unsafe { NVIC::unmask(irq) }
 
-            executor.spawner().make_send()
+            executor.spawner().make_fsend()
         }
 
         /// Get a SendSpawner for this executor
