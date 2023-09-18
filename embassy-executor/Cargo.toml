@@ -45,6 +45,8 @@ executor-interrupt = []
 # Enable nightly-only features
 nightly = []
 
+nrf52dk = []
+
 turbowakers = []
 
 integrated-timers = ["dep:embassy-time"]
