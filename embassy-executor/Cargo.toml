@@ -29,7 +29,7 @@ targets = ["thumbv7em-none-eabi"]
 features = ["defmt", "arch-cortex-m", "executor-thread", "executor-interrupt"]
 
 [dependencies]
-nrf-softdevice-s132 = { git = "https://github.com/embassy-rs/nrf-softdevice", rev = "a0467c55b09c4b48f4f5a428f6ba56734804b638"}
+nrf-softdevice-s132 = {git = "https://github.com/embassy-rs/nrf-softdevice", rev = "9eb8045bd4f75b981972b12e0898ed1ac2302145"}
 
 defmt = { version = "0.3", optional = true }
 log = { version = "0.4.14", optional = true }
