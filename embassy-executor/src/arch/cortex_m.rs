@@ -103,7 +103,16 @@ mod thread {
             loop {
                 unsafe {
                     self.inner.poll();
-                    asm!("wfe");
+                    #[cfg(feature = "nrf52dk")]
+                    {
+                        use nrf_softdevice_s132::sd_app_evt_wait;
+                        sd_app_evt_wait();
+                    }
+
+                    #[cfg(not(feature = "nrf52dk"))]
+                    {
+                        asm!("wfe");
+                    }
                 };
             }
         }
