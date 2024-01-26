@@ -10,7 +10,7 @@ fn __pender(context: *mut ()) {
         #[cfg(feature = "executor-thread")]
         // Try to make Rust optimize the branching away if we only use thread mode.
         if !cfg!(feature = "executor-interrupt") || context == THREAD_PENDER {
-            core::arch::asm!("sev");
+            //core::arch::asm!("sev");
             return;
         }
 
@@ -105,7 +105,10 @@ mod thread {
                     self.inner.poll();
                     #[cfg(feature = "nrf52dk")]
                     {
-                        //use nrf_softdevice_s132::sd_app_evt_wait;
+                        use nrf_softdevice_s132::sd_app_evt_wait;
+                        sd_app_evt_wait();
+
+                        /*
                         asm!("wfe");
 
                         //sd_app_evt_wait();
@@ -120,10 +123,6 @@ mod thread {
 
                         const SCB_ICSR_RESERVED_BITS_MASK: u32 = 0b0111_1111_1111_1111_1111_1111_1111_1111;
 
-                        //fn check_interrupt_pending() {
-
-                        //usbd.tasks_ep0status.write(|w| w.tasks_ep0status().set_bit());
-
                         let icsr = unsafe { (*SCB::PTR).icsr.read() };
 
                         if icsr & SCB_ICSR_RESERVED_BITS_MASK != 0 {
@@ -136,6 +135,7 @@ mod thread {
                             asm!("wfe");
                         }
                         //}
+                        */
                     }
 
                     #[cfg(not(feature = "nrf52dk"))]
