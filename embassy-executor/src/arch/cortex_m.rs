@@ -105,13 +105,55 @@ mod thread {
                     self.inner.poll();
                     #[cfg(feature = "nrf52dk")]
                     {
-                        use nrf_softdevice_s132::sd_app_evt_wait;
-                        sd_app_evt_wait();
+                        //use nrf_softdevice_s132::sd_app_evt_wait;
+                        asm!("wfe");
+
+                        //sd_app_evt_wait();
+                        use cortex_m::peripheral::SCB;
+                        use cortex_m::peripheral::{syst, Peripherals};
+
+                        //let peripherals = Peripherals::take().unwrap();
+                        //let scb = peripherals.SCB;
+
+                        // source: https://docs.rs/cortex-m/latest/src/cortex_m/peripheral/scb.rs.html#875-879
+                        //unsafe { SCB::PTR.icsr.read() & SCB_ICSR_PENDSVSET == SCB_ICSR_PENDSVSET }
+
+                        const SCB_ICSR_RESERVED_BITS_MASK: u32 = 0b0111_1111_1111_1111_1111_1111_1111_1111;
+
+                        //fn check_interrupt_pending() {
+
+                        //usbd.tasks_ep0status.write(|w| w.tasks_ep0status().set_bit());
+
+                        let icsr = unsafe { (*SCB::PTR).icsr.read() };
+
+                        if icsr & SCB_ICSR_RESERVED_BITS_MASK != 0 {
+                            // Ok, there is an interrupt pending, no need to go to sleep
+                            //return;
+                        } else {
+                            // next event will wakeup the CPU
+                            // If an interrupt occurred between the test of SCB::ICSR and this
+                            // instruction, WFE will just not put the CPU to sleep
+                            asm!("wfe");
+                        }
+                        //}
                     }
 
                     #[cfg(not(feature = "nrf52dk"))]
                     {
                         asm!("wfe");
+
+                        /*
+                        // Test if there is an interrupt pending (mask reserved regions)
+                        if (SCB->ICSR & (SCB_ICSR_RESERVED_BITS_MASK)) {
+                            // Ok, there is an interrut pending, no need to go to sleep
+                            return;
+                        } else {
+                            // next event will wakeup the CPU
+                            // If an interrupt occured between the test of SCB->ICSR and this
+                            // instruction, WFE will just not put the CPU to sleep
+                            __WFE();
+                        }
+                        */
                     }
                 };
             }
