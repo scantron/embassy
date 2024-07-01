@@ -11,7 +11,7 @@ use crate::interrupt::InterruptExt;
 use crate::{interrupt, pac};
 
 fn rtc() -> &'static pac::rtc0::RegisterBlock {
-    unsafe { &*pac::RTC1::ptr() }
+    unsafe { &*pac::RTC2::ptr() }
 }
 
 /// Calculate the timestamp from the period count and the tick count.
@@ -297,7 +297,7 @@ impl Driver for RtcDriver {
 
 #[cfg(feature = "rt")]
 #[interrupt]
-fn RTC1() {
+fn RTC2() {
     DRIVER.on_interrupt()
 }
 
