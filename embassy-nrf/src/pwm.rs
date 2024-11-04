@@ -800,6 +800,42 @@ impl<'d, T: Instance> SimplePwm<'d, T> {
         let max_duty = self.max_duty() as u32;
         clk / max_duty
     }
+
+
+    /// Sets the PWM-Channel0 output drive strength
+    #[inline(always)]
+    pub fn set_ch0_drive(&self, drive: OutputDrive) {
+        if let Some(pin) = &self.ch0 {
+            pin.conf().modify(|_, w| w.drive().variant(convert_drive(drive)));
+        }
+    }
+
+    /// Sets the PWM-Channel1 output drive strength
+    #[inline(always)]
+    pub fn set_ch1_drive(&self, drive: OutputDrive) {
+        if let Some(pin) = &self.ch1 {
+            pin.conf().modify(|_, w| w.drive().variant(convert_drive(drive)));
+        }
+    }
+
+    /// Sets the PWM-Channel2 output drive strength
+    #[inline(always)]
+    pub fn set_ch2_drive(&self, drive: OutputDrive) {
+        if let Some(pin) = &self.ch2 {
+            pin.conf().modify(|_, w| w.drive().variant(convert_drive(drive)));
+        }
+    }
+
+    /// Sets the PWM-Channel3 output drive strength
+    #[inline(always)]
+    pub fn set_ch3_drive(&self, drive: OutputDrive) {
+        if let Some(pin) = &self.ch3 {
+            pin.conf().modify(|_, w| w.drive().variant(convert_drive(drive)));
+        }
+    }
+
+
+    
 }
 
 impl<'a, T: Instance> Drop for SimplePwm<'a, T> {
