@@ -7,7 +7,7 @@ use core::sync::atomic::{compiler_fence, Ordering};
 use embassy_hal_internal::{into_ref, PeripheralRef};
 
 use crate::gpio::sealed::Pin as _;
-use crate::gpio::{convert_drive, AnyPin, Pin as GpioPin, PselBits};
+use crate::gpio::{convert_drive, OutputDrive, AnyPin, Pin as GpioPin, PselBits};
 use crate::ppi::{Event, Task};
 use crate::util::slice_in_ram_or;
 use crate::{interrupt, pac, Peripheral};
